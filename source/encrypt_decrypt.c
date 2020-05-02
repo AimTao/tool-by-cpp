@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 char MenuShow();
 int TestOrder(char order);
@@ -60,7 +61,7 @@ int TestOrder(char order) {
 
 // 加密
 void Enc() {
-
+    
 }
 
 // 解密
