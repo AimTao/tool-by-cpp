@@ -44,18 +44,27 @@ int main() {
     long num_key = time(NULL);
     char key[100] = {0};
     sprintf(key, "%ld", num_key * 13 - 20200502);
+    int key_lens = strlen(key);
     int size_key = num_key % 5 * 1024 + 1024; 
 
-    // 读文件
+    // 边读边写
     while (1) {
         char tmp_source[6144] = {0};
         int read_size = fread(tmp_source, 1, size_key, source_fp);
-        printf("%d\n", read_size);
         if (!read_size) {
             break;
         }
+        int source_lens = strlen(tmp_source);
+        for (int i = 0; i < source_lens; i++) {
+            tmp_source[i] = tmp_source[i] ^ key[i % key_lens];
+        }
+        fwrite(tmp_source, 1, size_key, enc_fp);
     }
+    fwrite(&num_key, 1, sizeof(num_key), enc_fp);
 
-    printf("%s", enc_path);
+    // 关闭文件
+    fclose(source_fp);
+    fclose(enc_fp);
+    return 0;
 }
 
