@@ -3,36 +3,54 @@
 #include <string.h>
 #include <time.h>
 
-int main() {
+int main(int argc, char **argv) {
 
     // 获取待加密文件路径
-    char source_path[512] = {0};
-    char backup_source_path[512] = {0};    printf("请输入待加密文件路径（例如: ../enc/hello.jpg）：");
-    scanf("%s", source_path);
+    char *source_path = argv[1];
+    char backup_source_path[512] = {0};
     strcpy(backup_source_path, source_path);
-    
-    // 生成已加密文件路径
-    char enc_path[512] = {0};
-    char tmp_last_path[100] = {0};  // 获取文件后缀名
-    char *strtok_p = strtok(backup_source_path, ".");
-    if (strtok_p != NULL) {
-        while (strtok_p != NULL) {
-            strcpy(tmp_last_path, strtok_p);
-            strtok_p = strtok(NULL, ".");
-        }
-        sprintf(enc_path, "%s_your_enc.%s", source_path, tmp_last_path);
-    } else {
-        sprintf(enc_path, "%s_your_enc", source_path);
-    }
 
-    // 打开文件
+    // 打开读文件，检查路径
     FILE *source_fp = NULL;
-    FILE *enc_fp = NULL;
     source_fp = fopen(source_path, "rb");
     if (source_fp == NULL) {
         perror("\n【打开待加密文件失败！】\n 原因：");
         return 0;
     }
+    
+    // 生成已加密文件路径
+    char enc_path[512] = {0};
+    char last_name[100] = {0};    // 获取文件后缀名
+    char file_name[100] = {0};   // 获取文件名（省去后缀名）
+    char *strtok_p = strtok(backup_source_path, ".");
+    strtok_p = strtok(NULL, ".");
+    if (strtok_p != NULL) {
+        while (strtok_p != NULL) {
+            strcpy(last_name, strtok_p);
+            strtok_p = strtok(NULL, ".");
+        }
+        char *last_path_ptr = NULL;
+        char *source_path_ptr = source_path;
+        while (1) {
+            last_path_ptr = strstr(source_path_ptr, last_name);
+            if (last_path_ptr == NULL) {
+                source_path_ptr -= strlen(last_name);
+                break;
+            } else {
+                source_path_ptr = last_path_ptr + strlen(last_name);
+                if (source_path_ptr > source_path + strlen(source_path)) {
+                    break;
+                }
+            }
+        }
+        strncpy(file_name, source_path, source_path_ptr - 1 - source_path);
+        sprintf(enc_path, "%s_enc.%s", file_name, last_name);
+    } else {
+        sprintf(enc_path, "%s_enc", source_path);
+    }
+
+    // 打开写文件
+    FILE *enc_fp = NULL;
     enc_fp = fopen(enc_path, "wb+");
     if (source_fp == NULL) {
         perror("\n【加密失败！】\n 原因：");
@@ -60,6 +78,7 @@ int main() {
         }
         fwrite(tmp_source, 1, read_size, enc_fp);
     }
+    printf("\n加密已完成！加密文件为于 %s\n\n", enc_path);
 
     // 关闭文件
     fclose(source_fp);
