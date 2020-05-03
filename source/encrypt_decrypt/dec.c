@@ -56,11 +56,10 @@ int main() {
         if (!read_size) {
             break;
         }
-        int enc_lens = strlen(tmp_enc);
-        for (int i = 0; i < enc_lens; i++) {
+        for (int i = 0; i < read_size; i++) {
             tmp_enc[i] = tmp_enc[i] ^ key[i % key_lens];
         }
-        fwrite(tmp_enc, 1, size_key, dec_fp);
+        fwrite(tmp_enc, 1, read_size, dec_fp);
     }
 
     // 关闭文件
