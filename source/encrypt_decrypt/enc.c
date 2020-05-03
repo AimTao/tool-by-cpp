@@ -55,11 +55,10 @@ int main() {
         if (!read_size) {
             break;
         }
-        int source_lens = strlen(tmp_source);
-        for (int i = 0; i < source_lens; i++) {
+        for (int i = 0; i < read_size; i++) {
             tmp_source[i] = tmp_source[i] ^ key[i % key_lens];
         }
-        fwrite(tmp_source, 1, size_key, enc_fp);
+        fwrite(tmp_source, 1, read_size, enc_fp);
     }
 
     // 关闭文件
