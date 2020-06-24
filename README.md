@@ -2,7 +2,7 @@
 
 使用 C/C++ 写的一些小工具。
 
- `executable` 文件夹下，有各平台的可执行程序，如果没有，可自行 clone 源码编译。👋 
+ `executable` 文件夹下，有各平台的部分可执行程序。担心有些二进制文件过大，造成 `.git` 文件过于臃肿，没有放到  `executable` 文件夹下，可以在 [releases](https://github.com/AimTao/tool-by-cpp/releases) 下载 ，或者自行 clone 源码编译。👋 
 
 字符集使用 utf-8，运行程序如出现乱码，可自行自行 clone 源码编译。👋
 
