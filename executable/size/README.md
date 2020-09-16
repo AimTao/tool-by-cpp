@@ -1,4 +1,4 @@
-## copy
+## size
 
 一个求文件大小的命令，
 
@@ -10,8 +10,9 @@
 
 ```sh
 ./size file_path
+
 # example
-# ./size download/1.txt
+./size download/1.txt
 ```
 
 + Windows
